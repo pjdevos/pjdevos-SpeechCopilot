@@ -106,24 +106,25 @@ async def generate_speech(request: SpeechRequest):
 
 
 def build_speech_prompt(request: SpeechRequest) -> str:
-    """
-    Build a detailed prompt for Claude based on the user's requirements
-    """
-
     # Language-specific instructions
-    language_instructions = {
-        "english": "Generate the speech in English.",
-        "dutch": "Generate the speech in Dutch (Nederlands). Use proper Dutch grammar, vocabulary, and cultural references appropriate for a Dutch-speaking audience.",
-        "french": "Generate the speech in French (Français). Use proper French grammar, vocabulary, and cultural references appropriate for a French-speaking audience."
-    }
+    if request.language == "dutch":
+        language_instruction = """
+CRITICAL: You MUST generate this speech entirely in Dutch (Nederlands). 
+Do not use any English words or phrases. Write naturally in Dutch as a native speaker would.
+Use Dutch cultural references and context appropriate for Dutch-speaking audiences.
+"""
+    elif request.language == "french":
+        language_instruction = """
+CRITICAL: You MUST generate this speech entirely in French (Français).
+Do not use any English words or phrases. Write naturally in French as a native speaker would.
+Use French cultural references and context appropriate for French-speaking audiences.
+"""
+    else:
+        language_instruction = "Generate the speech in English."
 
-    language_instruction = language_instructions.get(
-        request.language, language_instructions["english"])
+    prompt = f"""{language_instruction}
 
-    prompt = f"""You are an expert speechwriter. Generate a {request.length}-minute speech with the following specifications:
-
-LANGUAGE REQUIREMENT:
-{language_instruction}
+You are an expert speechwriter. Generate a {request.length}-minute speech with the following specifications:
 
 CONTEXT:
 - Occasion: {request.occasion}
@@ -132,21 +133,6 @@ CONTEXT:
 - Template/Style: {request.template}
 - Topic: {request.topic}
 - Additional Context: {request.additional_context}
-
-REQUIREMENTS:
-1. Structure the speech with clear introduction, body, and conclusion
-2. Match the specified tone throughout  
-3. Use language appropriate for the audience and cultural context
-4. Include rhetorical devices suitable for the occasion
-5. Ensure the speech fits the specified length
-6. If generating in Dutch or French, use natural, fluent language that sounds native
-
-DELIVERABLES:
-Please provide:
-1. The complete speech text in {request.language}
-2. Mark sections clearly: [INTRODUCTION], [BODY], [CONCLUSION]
-3. Include suggested emphasis points with *emphasis*
-4. Add timing notes in parentheses (pause here)
 
 Generate a compelling, well-structured speech that meets these requirements."""
 
