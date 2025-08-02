@@ -19,7 +19,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "http://192.168.0.4:3000"
+        "https://pjdevos-speech-copilot-a9iu.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],

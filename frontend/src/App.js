@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 // API helper functions
-const API_BASE_URL = 'http://192.168.0.4:8000'; // Use your computer's IP;
+const API_BASE_URL = 'https://pjdevos-speechcopilot-production.up.railway.app';
 
 const speechAPI = {
   testConnection: async () => {
