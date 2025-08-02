@@ -135,7 +135,7 @@ CONTEXT:
 
 REQUIREMENTS:
 1. Structure the speech with clear introduction, body, and conclusion
-2. Match the specified tone throughout
+2. Match the specified tone throughout  
 3. Use language appropriate for the audience and cultural context
 4. Include rhetorical devices suitable for the occasion
 5. Ensure the speech fits the specified length
