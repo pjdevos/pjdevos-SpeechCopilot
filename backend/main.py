@@ -40,6 +40,7 @@ class SpeechRequest(BaseModel):
     template: str
     topic: str = ""
     additional_context: str = ""
+    language: str = "english"
 
 
 class SpeechResponse(BaseModel):
@@ -108,7 +109,21 @@ def build_speech_prompt(request: SpeechRequest) -> str:
     """
     Build a detailed prompt for Claude based on the user's requirements
     """
+
+    # Language-specific instructions
+    language_instructions = {
+        "english": "Generate the speech in English.",
+        "dutch": "Generate the speech in Dutch (Nederlands). Use proper Dutch grammar, vocabulary, and cultural references appropriate for a Dutch-speaking audience.",
+        "french": "Generate the speech in French (Français). Use proper French grammar, vocabulary, and cultural references appropriate for a French-speaking audience."
+    }
+
+    language_instruction = language_instructions.get(
+        request.language, language_instructions["english"])
+
     prompt = f"""You are an expert speechwriter. Generate a {request.length}-minute speech with the following specifications:
+
+LANGUAGE REQUIREMENT:
+{language_instruction}
 
 CONTEXT:
 - Occasion: {request.occasion}
@@ -121,13 +136,14 @@ CONTEXT:
 REQUIREMENTS:
 1. Structure the speech with clear introduction, body, and conclusion
 2. Match the specified tone throughout
-3. Use language appropriate for the audience
+3. Use language appropriate for the audience and cultural context
 4. Include rhetorical devices suitable for the occasion
 5. Ensure the speech fits the specified length
+6. If generating in Dutch or French, use natural, fluent language that sounds native
 
 DELIVERABLES:
 Please provide:
-1. The complete speech text
+1. The complete speech text in {request.language}
 2. Mark sections clearly: [INTRODUCTION], [BODY], [CONCLUSION]
 3. Include suggested emphasis points with *emphasis*
 4. Add timing notes in parentheses (pause here)

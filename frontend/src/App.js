@@ -55,7 +55,8 @@ function App() {
     length: '5',
     template: '',
     topic: '',
-    additionalContext: ''
+    additionalContext: '',
+    language: 'english'
   });
   const [generatedSpeech, setGeneratedSpeech] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +82,8 @@ function App() {
           audience: wizardData.audience,
           tone: wizardData.tone,
           length: wizardData.length,
-          template: wizardData.template
+          template: wizardData.template,
+          language: wizardData.language
         }
       });
       
@@ -186,6 +188,22 @@ function App() {
                 <option value="5">5 minutes</option>
                 <option value="10">10 minutes</option>
                 <option value="15">15 minutes</option>
+                <option value="20">20 minutes</option>
+                <option value="25">25 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="35">35 minutes</option>
+                <option value="40">40 minutes</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Speech Language</label>
+              <select 
+                value={wizardData.language} 
+                onChange={(e) => setWizardData({...wizardData, language: e.target.value})}
+              >
+                <option value="english">🇺🇸 English</option>
+                <option value="dutch">🇳🇱 Nederlands (Dutch)</option>
+                <option value="french">🇫🇷 Français (French)</option>
               </select>
             </div>
           </div>
@@ -251,6 +269,7 @@ function App() {
                 <li><strong>Length:</strong> {wizardData.length} minutes</li>
                 <li><strong>Tone:</strong> {wizardData.tone}</li>
                 <li><strong>Template:</strong> {wizardData.template}</li>
+                <li><strong>Language:</strong> {wizardData.language}</li>
               </ul>
             </div>
             
