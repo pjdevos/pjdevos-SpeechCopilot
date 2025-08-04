@@ -74,6 +74,10 @@ async def generate_speech(request: SpeechRequest):
         # Build the prompt for Claude
         prompt = build_speech_prompt(request)
 
+        # Log the prompt for debugging
+        print(f"Generating speech in {request.language}")
+        print(f"Prompt being sent to Claude: {prompt[:200]}...")
+
         # Call Claude API
         response = claude_client.messages.create(
             model="claude-3-5-sonnet-20241022",
@@ -86,7 +90,10 @@ async def generate_speech(request: SpeechRequest):
         # Extract the speech from Claude's response
         speech_content = response.content[0].text
 
-        # Parse the response (we'll improve this later)
+        # Log the response for debugging
+        print(f"Claude response language check: {speech_content[:100]}...")
+
+        # Parse the response
         return SpeechResponse(
             speech=speech_content,
             structure={
@@ -202,7 +209,28 @@ Generate a compelling, well-structured speech now."""
 
     return prompt
 
-# Also add this enhanced debug endpoint
+# Test endpoint for debugging
+
+
+@app.get("/api/test-claude")
+async def test_claude():
+    """
+    Simple test to verify Claude API is working
+    """
+    try:
+        response = claude_client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=100,
+            messages=[
+                {"role": "user", "content": "Say hello and confirm you're working!"}
+            ]
+        )
+        return {"claude_response": response.content[0].text}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Claude API test failed: {str(e)}")
+
+# Test multilingual endpoint
 
 
 @app.get("/api/test-multilingual/{language}")
@@ -243,27 +271,6 @@ Utilisez UNIQUEMENT des mots français.
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Multilingual test failed: {str(e)}")
-
-# Test endpoint for debugging
-
-
-@app.get("/api/test-claude")
-async def test_claude():
-    """
-    Simple test to verify Claude API is working
-    """
-    try:
-        response = claude_client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            max_tokens=100,
-            messages=[
-                {"role": "user", "content": "Say hello and confirm you're working!"}
-            ]
-        )
-        return {"claude_response": response.content[0].text}
-    except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Claude API test failed: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
