@@ -310,6 +310,9 @@ function App() {
                   <button onClick={() => navigator.clipboard.writeText(generatedSpeech.speech)}>
                     Copy to Clipboard
                   </button>
+                  <button onClick={prevStep}>
+                    Go Back & Edit
+                  </button>
                   <button onClick={resetWizard}>Generate New Speech</button>
                 </div>
               </div>
