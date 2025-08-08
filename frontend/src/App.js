@@ -29,7 +29,8 @@ const speechAPI = {
           length: wizardData.length,
           template: wizardData.template,
           topic: wizardData.topic || '',
-          additional_context: wizardData.additionalContext || ''
+          additional_context: wizardData.additionalContext || '',
+          language: wizardData.language
         }),
       });
 
@@ -308,6 +309,9 @@ function App() {
                 <div className="speech-actions">
                   <button onClick={() => navigator.clipboard.writeText(generatedSpeech.speech)}>
                     Copy to Clipboard
+                  </button>
+                  <button onClick={prevStep}>
+                    Go Back & Edit
                   </button>
                   <button onClick={resetWizard}>Generate New Speech</button>
                 </div>
