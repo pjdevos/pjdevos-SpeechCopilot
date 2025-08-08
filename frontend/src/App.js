@@ -29,7 +29,8 @@ const speechAPI = {
           length: wizardData.length,
           template: wizardData.template,
           topic: wizardData.topic || '',
-          additional_context: wizardData.additionalContext || ''
+          additional_context: wizardData.additionalContext || '',
+          language: wizardData.language
         }),
       });
 
